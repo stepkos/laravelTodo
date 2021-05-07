@@ -5,7 +5,7 @@
 <script>
 
     const removeTodo = id => {
-        this.event.preventDefault()
+        this.event.preventDefault();
 
         axios.delete(`/todo/${id}`).then(
             response => (response.data.message === 'OK') ? location.reload() : console.log('Something was wrong'),
@@ -49,7 +49,7 @@
 
                         @foreach($todos as $todo)
                             <tr>
-                                <td>{{ $todo->name }}</td>
+                                <td style="user-select: none;" class="todoClass" id="{{$todo->id}}">{{ $todo->name }}</td>
                                 <td class="float-right">
                                     
                                     <a href="">
@@ -76,4 +76,31 @@
         </div>
     </div>
 </div>
+
+<script>
+
+    document.querySelectorAll('.todoClass').forEach(element => {
+        element.addEventListener('dblclick', () => {
+
+            if (element.classList.contains('clicked')) {
+                element.innerHTML = element.querySelector('input').getAttribute('value');
+                // zapytanie na backend
+            }
+            else {
+                element.innerHTML = `
+                    <input 
+                        type="text" 
+                        value="${element.textContent}" 
+                        name="name${element.getAttribute('id')}"
+                    >
+                `;
+            }
+
+            element.classList.toggle('clicked');
+
+        })
+    });
+
+</script>
+
 @endsection
