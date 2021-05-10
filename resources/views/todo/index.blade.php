@@ -51,10 +51,6 @@
                             <tr>
                                 <td style="user-select: none;" class="todoClass" id="{{$todo->id}}">{{ $todo->name }}</td>
                                 <td class="float-right">
-                                    
-                                    <a href="">
-                                        <i class="fas fa-pen"></i>
-                                    </a>
 
                                     <a href="">
                                         <i class="fas fa-search"></i>
@@ -83,8 +79,11 @@
         element.addEventListener('dblclick', () => {
 
             if (element.classList.contains('clicked')) {
-                element.innerHTML = element.querySelector('input').getAttribute('value');
-                // zapytanie na backend
+                axios.put(`/todo/${element.getAttribute('id')}`, { name: element.querySelector('input').value }).then(
+                    response => (response.data.message === 'OK') ? location.reload() : console.log('Something was wrong'),
+                    rejected => console.log(rejected)
+                );
+                // element.innerHTML = element.querySelector('input').getAttribute('value');
             }
             else {
                 element.innerHTML = `

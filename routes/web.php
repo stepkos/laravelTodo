@@ -24,4 +24,5 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 // resource = get, post, put, patch, delete
 Route::resource('/todo', TodoController::class);
-// Route::resource('/todo', TodoController);
+
+// Route::resource('/todo', TodoController::class);

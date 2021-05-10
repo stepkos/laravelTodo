@@ -45,4 +45,13 @@ class TodoController extends Controller {
         return response()->json(['message' => 'OK']);
     }
 
+    public function update(Request $request, Todo $todo) {
+    
+        $todo->update([
+            'name' => $request->get('name')
+        ]);
+
+        return response()->json(['message' => 'OK']);
+    }
+
 }
