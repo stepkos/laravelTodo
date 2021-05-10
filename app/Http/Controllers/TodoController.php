@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Todo\TodoDestroyRequest;
+use App\Http\Requests\Todo\TodoIndexRequest;
+use App\Http\Requests\Todo\TodoStoreRequest;
+use App\Http\Requests\Todo\TodoUpdateRequest;
 use App\Models\Todo;
 use Illuminate\Foundation\Auth\RedirectsUsers;
 use Illuminate\Http\Request;
@@ -22,34 +26,38 @@ class TodoController extends Controller {
 
 
 
-    public function index() {
+    public function index(TodoIndexRequest $request) {
 
-        $todos = Todo::where('user_id', auth()->user()->id)->paginate();
+        $todos = Todo::where('user_id', auth()->user()->id);
         
+        if ($request->wantsJson())
+            return response()->json($todos->get());
+
+        $todos = $todos->paginate();
         return view('todo.index', compact('todos'));
     }
 
 
-    public function store(Request $request) {
+    public function store(TodoStoreRequest $request) {
 
-        Todo::create([
-            'name' => $request->get('name'),
+        // ['name' => request->name', 'user_id' => auth()->user()->id]
+        Todo::create(array_merge($request->validated(), [
             'user_id' => auth()->user()->id
-        ]);
+        ]));
 
         return redirect('/todo');
     }
 
-    public function destroy(Todo $todo) {
+
+    public function destroy(TodoDestroyRequest $request, Todo $todo) {
         $todo->delete();
         return response()->json(['message' => 'OK']);
     }
 
-    public function update(Request $request, Todo $todo) {
+
+    public function update(TodoUpdateRequest $request, Todo $todo) {
     
-        $todo->update([
-            'name' => $request->get('name')
-        ]);
+        $todo->update($request->validated());
 
         return response()->json(['message' => 'OK']);
     }

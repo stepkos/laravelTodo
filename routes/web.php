@@ -22,7 +22,10 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-// resource = get, post, put, patch, delete
-Route::resource('/todo', TodoController::class);
 
+Route::group(['middleware' => 'auth'], function() {
+    Route::resource('/todo', TodoController::class)->except(['show']);
+});
+
+// resource = get, post, put, patch, delete
 // Route::resource('/todo', TodoController::class);

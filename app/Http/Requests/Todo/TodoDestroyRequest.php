@@ -4,7 +4,7 @@ namespace App\Http\Requests\Todo;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class TodoIndexRequest extends FormRequest
+class TodoDestroyRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,11 @@ class TodoIndexRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        $user = auth()->user();
+        $todo = $this->todo;
+
+        // jesli nie to uzytkownik dostanie 403
+        return $todo->user_id == $user->id;
     }
 
     /**

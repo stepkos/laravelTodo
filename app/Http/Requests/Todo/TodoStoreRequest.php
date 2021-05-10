@@ -4,7 +4,7 @@ namespace App\Http\Requests\Todo;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class TodoIndexRequest extends FormRequest
+class TodoStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,7 @@ class TodoIndexRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name' => 'required'
         ];
     }
 }
